@@ -1,0 +1,40 @@
+#calculadora{
+    width: 20rem;
+    height: 30rem;
+    background-color: rgb(3, 39, 73);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+#display{
+    width: 17rem;
+    height: 5rem;
+    background-color: rgb(189, 186, 184);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+/* #display p {
+    padding: 2px;
+} */
+
+.botoes{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.botoes button {
+    width: 4.2rem;
+    height: 4rem;
+    background-color: rgb(189, 186, 184);
+    margin: 1px;
+    border: none;
+    color: rgb(3, 39, 73);
+    border-radius: 15px;
+}
