@@ -1,49 +1,108 @@
+$(document).ready(function () {
+  let valorAtual = "";
+  let operacaoAtual = null;
+  let valorAnterior = null;
 
+  function atualizarDisplay(texto) {
+    const textoSemIgual = texto.includes("=")
+      ? texto.split("=")[0].trim()
+      : texto.trim();
 
-// function PegarValorBotao(){
-//     for()
-// }
-let display = document.querySelector('#display')
-//display.innerHTML ='0'
+    $("#display p").text(textoSemIgual || "0");
+  }
 
-let valor2 = []
+  $(".digito").on("click", function () {
+    const digito = $(this).text();
 
+    if (digito === "." && valorAtual.includes(".")) return;
 
-let digito = document.querySelectorAll(".digito")
-//console.log(digito[1].innerHTML)
+    valorAtual += digito;
 
-for(i=0;i<digito.length;i++){
-    digito[i].addEventListener('click',adicionarValor)
-}
+    if (valorAnterior !== null && operacaoAtual) {
+      atualizarDisplay(`${valorAnterior} ${operacaoAtual} ${valorAtual}`);
+    } else {
+      atualizarDisplay(valorAtual);
+    }
+  });
 
-// digito.addEventListener("click", adicionarValor)
+  $(".operacao").on("click", function () {
+    const operacao = $(this).text();
 
-function adicionarValor(e){
-    //display.innerHTML =''
-    let valor = e.target.innerHTML
-     valor2.push(valor);
-     valor3 = valor2.toString()
-     let v4 = valor3.replace(/,/gm, "");
-     
-     console.log(v4)
-    
+    if (operacao === "=") {
+      if (
+        valorAnterior !== null &&
+        operacaoAtual !== null &&
+        valorAtual !== ""
+      ) {
+        const resultado = calcular(
+          valorAnterior,
+          operacaoAtual,
+          parseFloat(valorAtual)
+        );
 
-     //valor2.push(valor)  
-    
-    let p = document.querySelector('p')
-    p.innerHTML = `${v4}`
-    inserirValorDisplay(p)
-}
+        atualizarDisplay(`${resultado}`);
 
-function inserirValorDisplay(tag){
-    
-    display.appendChild(tag)
-}
+        valorAnterior = resultado;
+        operacaoAtual = null;
+        valorAtual = "";
+      }
+    } else if (operacao === "C") {
+      valorAtual = "";
+      valorAnterior = null;
+      operacaoAtual = null;
+      atualizarDisplay("0");
+    } else {
+      if (valorAtual !== "") {
+        if (valorAnterior === null) {
+          valorAnterior = parseFloat(valorAtual);
+        } else {
+          valorAnterior = calcular(
+            valorAnterior,
+            operacaoAtual,
+            parseFloat(valorAtual)
+          );
+        }
+        operacaoAtual = operacao;
+        valorAtual = "";
+        atualizarDisplay(`${valorAnterior} ${operacaoAtual}`);
+      }
+    }
+  });
 
-function mascara(){
+  function calcular(valor1, operador, valor2) {
+    switch (operador) {
+      case "+":
+        return valor1 + valor2;
+      case "-":
+        return valor1 - valor2;
+      case "*":
+        return valor1 * valor2;
+      case "/":
+        return valor2 !== 0 ? valor1 / valor2 : "Erro";
+      default:
+        return valor2;
+    }
+  }
 
-}
+  $(document).on("keydown", function (e) {
+    const tecla = e.key;
 
-function limparDisplay(){
-  display.innerHTML =''
-}
+    if (/^\d$/.test(tecla)) {
+      $(".digito:contains(" + tecla + ")").click();
+    } else if (tecla === "." || tecla === ",") {
+      if (valorAtual.includes(".")) return;
+      $(".operacao:contains(.)").click();
+    } else if (
+      tecla === "+" ||
+      tecla === "-" ||
+      tecla === "*" ||
+      tecla === "/"
+    ) {
+      $(".operacao:contains(" + tecla + ")").click();
+    } else if (tecla === "=" || tecla === "Enter") {
+      $(".operacao:contains(=)").click();
+    } else if (tecla === "Escape") {
+      $(".operacao:contains(C)").click();
+    }
+  });
+});
