@@ -40,5 +40,5 @@ Este é um projeto simples de uma calculadora interativa feita com HTML, CSS e J
 
 3. Abra o arquivo `index.html` em um navegador de sua escolha. Não é necessário servidor web para rodar o projeto.
 
-Feito com 💙 por [WellingtonVXavier]
+## Feito com 💙 por WellingtonVXavier
 
